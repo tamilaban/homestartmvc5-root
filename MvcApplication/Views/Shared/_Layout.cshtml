@@ -49,14 +49,13 @@
     <script type="text/javascript" language="javascript">
         function iframeDidLoad() {
             console.log('done');
-            alert('Done');
         }
         var modal = document.getElementById('sloDiv');
         var btn = document.getElementById('qsLogoutBtn');
-        var frame = document.getElementById('app1');
+        console.log(btn)
         btn.onclick = function () {
             console.log('logout');
-            frame.src = "http://localhost:3030/Account/sloLogOut"
+            frame.src = "https://homestart-child.azurewebsites.net/Account/sloLogOut"
         }
     </script>
     @Scripts.Render("~/bundles/jquery")
