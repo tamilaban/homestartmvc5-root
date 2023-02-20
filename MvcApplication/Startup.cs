@@ -1,10 +1,13 @@
-﻿using Microsoft.IdentityModel.Protocols.OpenIdConnect;
+﻿using Honeycomb.OpenTelemetry;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Microsoft.Owin;
 using Microsoft.Owin.Host.SystemWeb;
 using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.OpenIdConnect;
 using MvcApplication.Support;
+using OpenTelemetry;
+using OpenTelemetry.Trace;
 using Owin;
 using System;
 using System.Configuration;
@@ -16,8 +19,18 @@ namespace MvcApplication
 {
     public class Startup
     {
+        private TracerProvider _tracerProvider;
+
         public void Configuration(IAppBuilder app)
         {
+            _tracerProvider = Sdk.CreateTracerProviderBuilder()
+            .AddHoneycomb(new HoneycombOptions
+            {
+                ServiceName = "root-mvc",
+                ApiKey = "JVFCG66jbMRrnu1K7EJPPC",
+                Dataset= "test"
+            })
+            .Build();
 
             // Configure Auth0 parameters
             string auth0Domain = ConfigurationManager.AppSettings["auth0:Domain"];
