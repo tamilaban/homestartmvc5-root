@@ -48,12 +48,10 @@
     </div>
     <script type="text/javascript" language="javascript">
         function iframeDidLoad() {
-            console.log('done');
         }
-        var modal = document.getElementById('sloDiv');
         var btn = document.getElementById('qsLogoutBtn');
         console.log(btn)
-        btn.onclick = function () {
+        btn.addEventListener('click',function () {
             console.log('logout');
             frame.src = "https://homestart-child.azurewebsites.net/Account/sloLogOut"
         }
