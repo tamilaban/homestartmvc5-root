@@ -25,10 +25,11 @@
                 <ul class="nav navbar-nav navbar-right">
                     @if (User.Identity.IsAuthenticated)
                     {
-                        <li  id="qsLogoutBtn" >@Html.ActionLink("Logout", "Logout", "Account")</li>
+                        <li><a asp-controller="Account" asp-action="Profile">Hello @User.Identity.Name!</a></li>
+
+                        <li id="qsLogoutBtn">@Html.ActionLink("Logout", null, null, new { onclick = "sloLogout()" })</li>
                         <div class="sloWrapper" id="sloDiv">
-                            <iframe id="app1" class="sloiframe" width="0" height="0"
-                                    onLoad="iframeDidLoad()"></iframe>
+                            <iframe id="app1" class="sloiframe" width="0" height="0"></iframe>
                         </div>
                     }
                     else
@@ -47,14 +48,33 @@
         </footer>
     </div>
     <script type="text/javascript" language="javascript">
-        function iframeDidLoad() {
+
+        async function sloLogout() {
+            var apploaded = false;
+            try {
+                var iframe = document.getElementById('app1');
+                iframe.src = "https://homestart-child.azurewebsites.net/Account/sloLogOut"
+                await waitforIframeLoad(iframe); 
+                apploaded = true;
+
+            } catch (error) {
+                apploaded = true;
+            }
+            if (apploaded) {
+                var xhr = new XMLHttpRequest();
+                xhr.open("GET", "/Account/Logout", false);
+                xhr.send();
+            }
         }
-        var btn = document.getElementById('qsLogoutBtn');
-        console.log(btn)
-        btn.addEventListener('click', function () {
-            console.log('logout');
-            frame.src = "https://homestart-child.azurewebsites.net/Account/sloLogOut"
-        });
+
+        function waitforIframeLoad(iframe) {
+            return new Promise(resolve => {
+                iframe.contentWindow.addEventListner('load',
+                    () => {
+                        resolve();
+                    })
+            });
+        }
     </script>
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
