@@ -49,20 +49,29 @@
     </div>
     <script type="text/javascript" language="javascript">
 
-        function sloLogout() {
-            var apploaded = false;
-            fetch('https://homestart-child.azurewebsites.net/Account/sloLogOut')
-                .then(data => {
-                    apploaded = true;
-                })
-                .catch(error => {
-                    apploaded = true;
-                });
+        async function sloLogout() {
+            try {
+                const iframe = document.createElement('iframe');
+                iframe.src = "https://homestart-child.azurewebsites.net/Account/sloLogOut"
+                await waitforIframeLoad(iframe); 
+
+            } catch (error) {
+                console.log('error');
+            }
             if (apploaded) {
                 var xhr = new XMLHttpRequest();
                 xhr.open("GET", "/Account/Logout", false);
                 xhr.send();
             }
+        }
+
+        function waitforIframeLoad(iframe) {
+            return new Promise(resolve => {
+                iframe.contentWindow.addEventListner('load',
+                    () => {
+                        resolve();
+                    })
+            });
         }
     </script>
     @Scripts.Render("~/bundles/jquery")
